@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- css sheet for how the page is laid out -->
+
+    <link
+      rel="stylesheet"
+      href="visualizationPageStyle.css" />
+
+    <!-- jqueury stuff.  Only used for the animation speed slider. -->
+    <link
+      rel="stylesheet"
+      href="ThirdParty/jquery-ui-1.8.11.custom.css" />
+
+    <script src="ThirdParty/jquery-1.5.2.min.js"></script>
+    <script src="ThirdParty/jquery-ui-1.8.11.custom.min.js"></script>
+
+    <!-- Javascript for the actual visualization code -->
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/CustomEvents.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/UndoFunctions.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/AnimatedObject.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/AnimatedLabel.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/AnimatedCircle.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/AnimatedRectangle.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/AnimatedLinkedList.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/HighlightCircle.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/Line.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/ObjectManager.js"></script>
+    <script
+      type="text/javascript"
+      src="AnimationLibrary/AnimationMain.js"></script>
+    <script
+      type="text/javascript"
+      src="AlgorithmLibrary/Algorithm.js"></script>
+    <script
+      type="text/javascript"
+      src="AlgorithmLibrary/AVL.js"></script>
+  </head>
+
+  <body
+    onload="init();"
+    class="VisualizationMainPage">
+    <div id="container">
+      <div
+        ="id"
+        ="mainContent">
+        <div id="algoControlSection">
+          <!-- Table for buttons to control specific animation (insert/find/etc) -->
+          <!-- (filled in by javascript code specific to the animtion) -->
+          <table id="AlgorithmSpecificControls"></table>
+        </div>
+        <button
+          id="magic"
+          style="
+            background-color: #3498db;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          ">
+          Магия!
+        </button>
+
+        <!-- Drawing canvas where all animation is done.  Note:  can be resized in code -->
+
+        <canvas
+          id="canvas"
+          width="1000"
+          height="500"></canvas>
+
+        <div id="generalAnimationControlSection">
+          <!-- Table for buttons to control general animation (play/pause/undo/etc) ->
+					<!-- (filled in by javascript code, specifically AnimationMain.js)  -->
+
+          <table id="GeneralAnimationControls"></table>
+        </div>
+      </div>
+      <!-- mainContent -->
+    </div>
+    <!-- container -->
+  </body>
+  <script type="text/javascript">
+    const custIns = async (arr) => {
+      const inputElement = document.querySelector(
+        'input[type="text"][size="4"]'
+      );
+
+      const determValue = (currV) => {
+        if (inputElement) {
+          // Устанавливаем значение
+          inputElement.value = currV;
+        } else {
+          console.error('Элемент не найден');
+        }
+      };
+
+      const clickOnInsButton = () => {
+        const buttonElement = document.querySelector(
+          'input[type="button"][value="Insert"]'
+        );
+
+        // Проверяем, был ли найден элемент
+        if (buttonElement) {
+          // Симулируем нажатие на кнопку
+          buttonElement.click();
+        } else {
+          console.error('Элемент не найден');
+        }
+      };
+
+      for (let i = 0; i < arr.length; i++) {
+        setTimeout(
+          ((index) => {
+            return () => {
+              determValue(arr[index]);
+              clickOnInsButton();
+            };
+          })(i),
+          3000 * i
+        );
+      }
+    };
+
+    let groupFam = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const userInput = prompt('Список фамилий:');
+      groupFam = userInput.split(', ');
+      console.log(groupFam);
+    });
+
+    document.getElementById('magic').addEventListener('click', () => {
+      custIns(groupFam);
+    });
+  </script>
+</html>
